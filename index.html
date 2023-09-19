@@ -39,36 +39,30 @@
         <script>
             let timer;
             let isRunning = false;
+            let isInput = false;
             let hoursInput = document.getElementById('hours');
             let minutesInput = document.getElementById('minutes');
             let secondsInput = document.getElementById('seconds');
             let startButton = document.querySelector('.btn-start');
             let pauseButton = document.querySelector('.btn-pause');
             let resetButton = document.querySelector('.btn-reset');
-            //let timerDisplay = document.getElementById('timer-display');
 
             pauseButton.style.display = 'none';
             pauseButton.style.backgroundColor = '#15c2b8';
             pauseButton.style.color = '#FFFFFF';
 
-            hoursInput.addEventListener('keydown', () => {
+            startButton.disabled = true;
+
+            // 시간 입력 확인
+            function enableButton() {
                 startButton.style.backgroundColor = '#5180FF';
                 resetButton.style.backgroundColor = '#FB7099';
                 startButton.style.color = '#FFFFFF';
                 resetButton.style.color = '#FFFFFF';
-            });
-            minutesInput.addEventListener('keydown', () => {
-                startButton.style.backgroundColor = '#5180FF';
-                resetButton.style.backgroundColor = '#FB7099';
-                startButton.style.color = '#FFFFFF';
-                resetButton.style.color = '#FFFFFF';
-            });
-            secondsInput.addEventListener('keydown', () => {
-                startButton.style.backgroundColor = '#5180FF';
-                resetButton.style.backgroundColor = '#FB7099';
-                startButton.style.color = '#FFFFFF';
-                resetButton.style.color = '#FFFFFF';
-            });
+
+                startButton.disabled = false;
+                isInput = true;
+            }
 
             // 타이머 표시 업데이트
             function updateTimerDisplay(totalSeconds) {
@@ -79,8 +73,6 @@
                 hoursInput.value = hours;
                 minutesInput.value = minutes;
                 secondsInput.value = seconds;
-
-                //timerDisplay.innerHTML = totalSeconds;
             }
 
             // 타이머 동작 로직
@@ -114,10 +106,9 @@
 
             // 타이머 시작 버튼 클릭
             startButton.addEventListener('click', () => {
-                startButton.style.display = 'none';
-                pauseButton.style.display = 'block';
-
-                if (!isRunning) {
+                if (!isRunning && isInput) {
+                    startButton.style.display = 'none';
+                    pauseButton.style.display = 'block';
                     startTimer();
                 }
             });
@@ -126,6 +117,7 @@
             resetButton.addEventListener('click', () => {
                 clearInterval(timer);
                 isRunning = false;
+                isInput = false;
 
                 hoursInput.value = '';
                 minutesInput.value = '';
@@ -150,6 +142,17 @@
                 } else {
                     startTimer();
                 }
+            });
+
+            // 숫자입력시 버튼 활성화
+            hoursInput.addEventListener('keydown', () => {
+                enableButton();
+            });
+            minutesInput.addEventListener('keydown', () => {
+                enableButton();
+            });
+            secondsInput.addEventListener('keydown', () => {
+                enableButton();
             });
         </script>
     </body>
